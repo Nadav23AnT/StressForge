@@ -69,4 +69,16 @@ app.listen(3000);
 2. התאימו קבצי קונפיגורציה (חיבור ל־Redis, S3 וכדומה).
 3. הפעילו את ה־Backend ולאחר מכן את ה־Frontend מתוך התיקיות המתאימות.
 
-כרגע הפרויקט מכיל את מסמך התכנון בלבד וללא קוד הרצה מלא.
+כעת הפרויקט כולל מימוש בסיסי של ה־Backend וה־Frontend להפעלה מקומית.
+
+## Running Locally
+
+1. Install Docker and Node.js.
+2. Start a Redis server (e.g. `docker run -p 6379:6379 redis`).
+3. Install backend dependencies and start the server:
+   ```bash
+   cd backend
+   npm install
+   npm start
+   ```
+4. Open `frontend/index.html` in your browser and run a test.

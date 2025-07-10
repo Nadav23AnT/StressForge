@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StressForge</title>
+  <script>
+    async function runTest() {
+      const url = document.getElementById('url').value;
+      const stages = JSON.parse(document.getElementById('stages').value);
+      const res = await fetch('/api/tests', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ url, stages })
+      });
+      const { jobId } = await res.json();
+      document.getElementById('status').innerText = 'Job ' + jobId + ' queued';
+      checkStatus(jobId);
+    }
+    async function checkStatus(id) {
+      const res = await fetch('/api/tests/' + id + '/status');
+      const data = await res.json();
+      document.getElementById('status').innerText = 'Status: ' + data.status;
+      if (data.status === 'done') {
+        document.getElementById('download').innerHTML = '<a href="/api/tests/' + id + '/results">Download Results</a>';
+      } else if (data.status === 'error') {
+        document.getElementById('status').innerText = 'Status: error';
+      } else {
+        setTimeout(() => checkStatus(id), 2000);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>StressForge</h1>
+  <label>URL: <input id="url" type="text" /></label><br>
+  <label>Stages (JSON): <textarea id="stages" rows="4">[{"duration":"10s","target":1}]</textarea></label><br>
+  <button onclick="runTest()">Run Test</button>
+  <p id="status"></p>
+  <p id="download"></p>
+</body>
+</html>
